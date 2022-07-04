@@ -1,4 +1,5 @@
 from pypresence import Presence
+import readline
 import time
 import sys
 
@@ -19,13 +20,27 @@ data = {                      # Template
 if len(sys.argv) > 1:
     pass # Add pre-build combos   
 
+print("Press Enter to skip a field\nAvailable images : [python, c, cpp, visual-studio-code]\n")
+
 for i in data.keys():             # Ask for input if value is None in template
     if data[i] == None:
-        data[i] = input(f'{i}: ')
         if i != 'buttons':
+            data[i] = input(f'{i}: ')     
             data[i] = None if data[i] == '' else data[i]
         else:
-            data[i] = 'None' if data[i] == '' else data[i]
+            nbuttons = 3
+            data[i] = list()
+            while nbuttons > 2:
+                nbuttons = input(f'No. of buttons(<=2): ')
+                nbuttons = 0 if nbuttons == '' else int(nbuttons)
+
+            for j in range(nbuttons):
+                url = input(f'url: ')  
+                label = input(f'label: ')
+                print(f"Button {j} added.")
+                data[i].append({"label":label, "url":url})
+
+            data[i] = None if nbuttons == 0 else data[i]
 
 RPC.update(state=data['state'],
       details=data['details'],
@@ -33,7 +48,7 @@ RPC.update(state=data['state'],
       large_text=data['large_text'],
       small_image=data['small_image'],
       small_text=data['small_text'],
-      buttons=eval(data['buttons']))  # Set the presence
+      buttons=data['buttons'])  # Set the presence
 
 '''
 RPC.update(state="Lookie Lookie",
