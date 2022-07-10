@@ -20,7 +20,7 @@ data = {                      # Template
 if len(sys.argv) > 1:
     pass # Add pre-build combos   
 
-print("Press Enter to skip a field\nAvailable images : [python, c, cpp, visual-studio-code]\n")
+print("Press Enter to skip a field\nAvailable images : [python, c, cpp, visual-studio-code, gh, terminal]\n")
 
 for i in data.keys():             # Ask for input if value is None in template
     if data[i] == None:
