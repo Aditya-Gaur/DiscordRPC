@@ -14,7 +14,8 @@ data = {                      # Template
      'large_text':None, 
      'small_image':None, 
      'small_text':None, 
-     'buttons':None
+     'buttons':None,
+     'time':None
       }
 
 if len(sys.argv) > 1:
@@ -24,9 +25,18 @@ print("Press Enter to skip a field\nAvailable images : [python, c, cpp, visual-s
 
 for i in data.keys():             # Ask for input if value is None in template
     if data[i] == None:
-        if i != 'buttons':
+        if i != 'buttons' and i != 'time':
             data[i] = input(f'{i}: ')     
             data[i] = None if data[i] == '' else data[i]
+        elif i == 'time':
+            inputs = ('y', 'n')
+            user = 'None'
+            while user[0] not in inputs:
+                user = input(f'Add timer (y/n): ')
+                if user == '':
+                    break
+            buff = 'n' if user == '' else user[0]
+            data[i] = None if buff == 'n' else time.time()
         else:
             nbuttons = 3
             data[i] = list()
@@ -48,7 +58,8 @@ RPC.update(state=data['state'],
       large_text=data['large_text'],
       small_image=data['small_image'],
       small_text=data['small_text'],
-      buttons=data['buttons'])  # Set the presence
+      buttons=data['buttons'],
+      start=data['time'])  # Set the presence
 
 '''
 RPC.update(state="Lookie Lookie",
