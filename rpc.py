@@ -1,11 +1,23 @@
 from pypresence import Presence
-import readline
 import time
 import sys
+import requests
+from random import choice
 
 client_id = '992798462565417051'  # My app ID, (optional : put your's here)
 RPC = Presence(client_id)  # Initialize the client class
 RPC.connect() # Start the handshake loop
+
+def update():
+    RPC.update(state=data['state'],
+      details=data['details'],
+      large_image=data['large_image'],
+      large_text=data['large_text'],
+      small_image=data['small_image'],
+      small_text=data['small_text'],
+      buttons=data['buttons'],
+      start=data['time'])  # Set the presence
+
 
 data = {                      # Template 
      'state':None,
@@ -21,7 +33,7 @@ data = {                      # Template
 if len(sys.argv) > 1:
     pass # Add pre-build combos   
 
-print("Press Enter to skip a field\nAvailable images : [python, c, cpp, visual-studio-code, gh, terminal]\n")
+print("Press Enter to skip a field\nAvailable images : [python, c, cpp, visual-studio-code, gh, terminal, yt]\n")
 
 for i in data.keys():             # Ask for input if value is None in template
     if data[i] == None:
@@ -52,14 +64,7 @@ for i in data.keys():             # Ask for input if value is None in template
 
             data[i] = None if nbuttons == 0 else data[i]
 
-RPC.update(state=data['state'],
-      details=data['details'],
-      large_image=data['large_image'],
-      large_text=data['large_text'],
-      small_image=data['small_image'],
-      small_text=data['small_text'],
-      buttons=data['buttons'],
-      start=data['time'])  # Set the presence
+
 
 '''
 RPC.update(state="Lookie Lookie",
@@ -70,7 +75,25 @@ RPC.update(state="Lookie Lookie",
       small_text="VS code",
       buttons=[{"label": "Website", "url": "https://github.com/Aditya-Gaur"}, {"label": "TODO", "url": "https://google.com"}])  # Set the presence
 '''
-
+update()
 print('Running..')
+
+# Extra functionality
+quote_rpc = True if data['state'] == "anime_quote" else False         # initiate anime quotes if state= anime_quote
+gif_rpc = True if data['large_image'] == "anime_gif" else False       # initiate anime gifs if large_image = anime_gif also(optional) large_text=gif_type
+
+gif_reactions = ["airkiss","angrystare","bite","bleh","blush","brofist","celebrate","cheers","clap","confused","cool","cry","cuddle","dance","drool","evillaugh","facepalm","handhold","happy","headbang","hug","kiss","laugh","lick","love","mad","nervous","no","nom","nosebleed","nuzzle","nyah","pat","peek","pinch","poke","pout","punch","roll","run","sad","scared","shrug","shy","sigh","sip","slap","sleep","slowclap","smack","smile","smug","sneeze","sorry","stare","stop","surprised","sweat","thumbsup","tickle","tired","wave","wink","woah","yawn","yay","yes"]
+
 while True:  # The presence will stay on as long as the program is running
-    time.sleep(15) # Can only update rich presence every 15 seconds
+    if quote_rpc:
+        q = eval(requests.get("https://api.rei.my.id/v3/quotes").text)     # {'quote': 'This is what a real trump card is.', 'anime': 'Naruto', 'id': 743, 'name': 'Shino Aburame'}
+        data['details'] = f"Quote from {q['anime'][0:128]}"
+        data['state'] = q['quote'][0:128]      # max char length 128
+
+    if gif_rpc:
+        rect = choice(gif_reactions) if data['large_text'] not in gif_reactions else data['large_text']
+        i = eval(requests.get(f"https://api.otakugifs.xyz/gif?reaction={rect}").text)     # {"url":"https://cdn.otakugifs.xyz/gifs/kiss/e5ba4cf1044a70a5.gif"}
+        data['large_image'] = i["url"]                                                 
+
+    update()
+    time.sleep(20) # Can only update rich presence every 15 seconds
