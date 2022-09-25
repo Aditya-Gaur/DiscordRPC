@@ -3,8 +3,10 @@ import time
 import sys
 import requests
 from random import choice
+import json 
 
 client_id = '992798462565417051'  # My app ID, (optional : put your's here)
+API_KEY = 'PUT_THY_API_KEY_HERE' # optional tenor key !required to use gif options head over to https://developers.google.com/tenor/guides/quickstart to get one
 RPC = Presence(client_id)  # Initialize the client class
 RPC.connect() # Start the handshake loop
 
@@ -79,21 +81,45 @@ update()
 print('Running..')
 
 # Extra functionality
-quote_rpc = True if data['state'] == "anime_quote" else False         # initiate anime quotes if state= anime_quote
-gif_rpc = True if data['large_image'] == "anime_gif" else False       # initiate anime gifs if large_image = anime_gif also(optional) large_text=gif_type
+anime_quote_rpc = True if data['state'] == "anime_quote" else False         # initiate anime quotes if state= anime_quote
+anime_gif_rpc = True if data['large_image'] == "anime_gif" else False       # initiate anime gifs if large_image = anime_gif also(optional) large_text=gif_type
+philosophy_quote_rpc = True if data['state'] == "p_quote" else False 
+gif_rpc = True if data['large_image'] == "gif" else False
 
 gif_reactions = ["airkiss","angrystare","bite","bleh","blush","brofist","celebrate","cheers","clap","confused","cool","cry","cuddle","dance","drool","evillaugh","facepalm","handhold","happy","headbang","hug","kiss","laugh","lick","love","mad","nervous","no","nom","nosebleed","nuzzle","nyah","pat","peek","pinch","poke","pout","punch","roll","run","sad","scared","shrug","shy","sigh","sip","slap","sleep","slowclap","smack","smile","smug","sneeze","sorry","stare","stop","surprised","sweat","thumbsup","tickle","tired","wave","wink","woah","yawn","yay","yes"]
 
 while True:  # The presence will stay on as long as the program is running
-    if quote_rpc:
+    if anime_quote_rpc:
         q = eval(requests.get("https://api.rei.my.id/v3/quotes").text)     # {'quote': 'This is what a real trump card is.', 'anime': 'Naruto', 'id': 743, 'name': 'Shino Aburame'}
         data['details'] = f"Quote from {q['anime'][0:128]}"
         data['state'] = q['quote'][0:128]      # max char length 128
 
-    if gif_rpc:
+    if anime_gif_rpc:
         rect = choice(gif_reactions) if data['large_text'] not in gif_reactions else data['large_text']
         i = eval(requests.get(f"https://api.otakugifs.xyz/gif?reaction={rect}").text)     # {"url":"https://cdn.otakugifs.xyz/gifs/kiss/e5ba4cf1044a70a5.gif"}
-        data['large_image'] = i["url"]                                                 
+        data['large_image'] = i["url"]
 
-    update()
+    if philosophy_quote_rpc:
+        with open("assets/p_quotes.txt", "r") as f :
+            quotes = eval(f.read())
+        q = choice(quotes) 
+        data['details'] = f"Quote from {q['source'][0:50]} on {q['philosophy'][0:30]}"
+        data['state'] = q['quote'][0:128]      # max char length 128         
+
+    if gif_rpc:
+        if data['large_text'] == "":
+            gg = eval(requests.get(f"https://tenor.googleapis.com/v2/categories?key={API_KEY}").text)["tags"]
+            gf = choice(gg)
+            data["large_image"] = gf["image"]
+            data["large_text"] = gf["searchterm"]
+        else:
+            gg = json.loads(requests.get(f"https://tenor.googleapis.com/v2/search?q={data['large_text']}&key={API_KEY}&limit=25").text)["results"]
+            gf = choice(gg)
+            data["large_image"] = gf["media_formats"]["gif"]["url"]
+            data["large_text"] = data['large_text']
+
+    try:
+        update()
+    except:
+        pass
     time.sleep(20) # Can only update rich presence every 15 seconds
