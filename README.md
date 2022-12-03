@@ -32,6 +32,16 @@ pip install requests
 python3 rpc.py optional_template_id
 ```
 
+#### NOTE: 
+To change the deafault title "Adrick's Tavern" you need to create your own dc application. Head over to https://discord.com/developers/applications to create a new application. The name of your application will be displayed once you change the client id on line 8 
+```
+client_id = '992798462565417051'  # My app ID, (optional : put your's here)
+```
+Head over to https://support-dev.discord.com/hc/en-us/articles/360028717192-Where-can-I-find-my-Application-Team-Server-ID to find where your client id is located : )
+
+<br />
+
+
 - **Example 1**
 ```
 Press Enter to skip a field
