@@ -78,7 +78,21 @@ state: p_quote
 ```
 
 ### 4. **Using custom tenor gifs**
-TODO from here
+```
+large_image: gif
+large_text: gif search topic(any)
+```
+- NOTE: Tenor API key required head over to https://developers.google.com/tenor/guides/quickstart to get one and change line 9
+```
+API_KEY = "sasasYourapikeybruh"
+```
+
+<br />
+
+### **Screenshots**
+![Screenshot_20221203-185240_Discord](https://user-images.githubusercontent.com/75514601/205442988-b6e32a18-36dd-474d-aaf7-f44ccaebb615.jpg)
+![Screenshot 2022-12-03 185918](https://user-images.githubusercontent.com/75514601/205443202-45034374-f4fa-4d0c-a5e0-5bc37a16b2b6.png)
+
 
 <br />
 
