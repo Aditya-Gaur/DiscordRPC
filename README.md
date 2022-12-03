@@ -52,7 +52,7 @@ Button 1 added.
 Add timer (y/n): y
 Running..
 ```
-<img src="assets/ss1.PNG">
+<img src="assets/ss1.jpg">
 
 <br />
 
