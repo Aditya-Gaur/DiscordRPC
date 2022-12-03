@@ -52,7 +52,7 @@ Button 1 added.
 Add timer (y/n): y
 Running..
 ```
-![ss1](https://github.com/Aditya-Gaur/DiscordRPC/raw/main/assets/ss1.png)
+<img src="assets/ss1.PNG">
 
 <br />
 
