@@ -10,6 +10,7 @@ Make custom Discord RPC's easily
 ```
 pip3 install pypresence
 ```
+
 or in case that doesn't work
 ```
 python3 -m pip3 install pypresence
@@ -52,7 +53,7 @@ Button 1 added.
 Add timer (y/n): y
 Running..
 ```
-![ss1](https://github.com/Aditya-Gaur/DiscordRPC/raw/main/assets/ss1.png)
+![ss1](https://user-images.githubusercontent.com/75514601/205442045-ed9ccb65-d497-428a-91c6-db66b75ac995.png)
 
 <br />
 
